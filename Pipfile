@@ -12,6 +12,9 @@ numpy = "*"
 scipy = "*"
 seaborn = "*"
 requests = "*"
+beautifulsoup4 = "*"
+lxml = "*"
+unidecode = "*"
 
 [requires]
 python_version = "3.7"
