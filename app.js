@@ -6,6 +6,9 @@ const favicon = require('serve-favicon');
 // get routes and start setup of app
 const app = express();
 
+// add favicon
+app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
+
 // app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/data'));
