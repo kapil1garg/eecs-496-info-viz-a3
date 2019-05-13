@@ -28,11 +28,14 @@ $(function() {
     bgColor = null,
     txtColor = null;
 
-  queue()
-    .defer(d3.json, 'wine_reviews_small.json')
-    .await(ready);
+  // load data and start plotting when ready
+  d3.json('wine_reviews_small.json').then(data => {
+    ready(data);
+  }).catch(err => {
+    console.log('Error with loading data into D3: ', err);
+  });
 
-  function ready(error, data) {
+  function ready(data) {
     // set original data variable
     originalData = [...data]; // deep copy to remove references
 
