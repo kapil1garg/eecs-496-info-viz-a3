@@ -2,10 +2,9 @@
   "name": "wine-visualizer",
   "version": "1.0.0",
   "description": "Wine visualizer interactive visualization for EECS 496: Interactive Data Visualization, Assignment 3",
-  "main": "app.js",
+  "main": "./bin/www",
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
   "repository": {
     "type": "git",
@@ -15,7 +14,10 @@
     "d3"
   ],
   "author": "Kapil Garg",
-  "license": "ISC",
+  "contributors": [
+    "Kapil Garg (https://kgarg.com/)"
+  ],
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/kapil1garg/eecs-496-info-viz-a3/issues"
   },
