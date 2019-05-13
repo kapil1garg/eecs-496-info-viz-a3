@@ -110,7 +110,7 @@ $(function() {
       .attr('x', w)
       .attr('y',h - 10)
       .style('text-anchor','end')
-      .text('Reviewer Rating');
+      .text('Reviewer Score');
 
     // add y-axis
     svg.append('g')
@@ -206,9 +206,14 @@ $(function() {
       max: filterVals.vintage[1],
       values: [filterVals.vintage[0], filterVals.vintage[1]],
       slide: function(event, ui) {
+        // set UI text
         $amountVintage.val( `${ ui.values[0] } - ${ ui.values[1] }`);
+
+        // update filter values
         filterVals.vintage = [ui.values[0], ui.values[1]];
-        filterAndUpdateData();
+
+        // dynamically filter data and re-draw plot
+        update(filterData());
       }
     });
     $amountVintage.val( `${ $sliderVintage.slider("values", 0) } - ${ $sliderVintage.slider( "values", 1 ) }`);
@@ -223,9 +228,14 @@ $(function() {
       max: filterVals.price[1],
       values: [filterVals.price[0], filterVals.price[1]],
       slide: function(event, ui) {
+        // set UI text
         $amountPrice.val( `$${ ui.values[ 0 ] } - $${ ui.values[ 1 ] }`);
+
+        // update filter values
         filterVals.price = [ui.values[0], ui.values[1]];
-        filterAndUpdateData();
+
+        // dynamically filter data and re-draw plot
+        update(filterData());
       }
     });
     $amountPrice.val( `$${ $sliderPrice.slider( "values", 0 ) } - $${ $sliderPrice.slider( "values", 1 ) }`);
@@ -240,24 +250,26 @@ $(function() {
       max: filterVals.points[1],
       values: [filterVals.points[0], filterVals.points[1]],
       slide: function(event, ui) {
+        // set UI text
         $amountRating.val( `${ ui.values[ 0 ] } - ${ ui.values[ 1 ] }`);
+
+        // update filter values
         filterVals.points = [ui.values[0], ui.values[1]];
-        filterAndUpdateData();
+
+        // dynamically filter data and re-draw plot
+        update(filterData());
       }
     });
     $amountRating.val( `${ $sliderRating.slider( "values", 0 ) } - ${ $sliderRating.slider( "values", 1 ) }`);
   }
 
-  function filterAndUpdateData() {
-    // filter data
-    let filteredData = originalData.filter(wine => {
+  function filterData() {
+    // filter data and return
+    return originalData.filter(wine => {
       return (wine.vintage >= filterVals.vintage[0] && wine.vintage <= filterVals.vintage[1]) &&
         (wine.price >= filterVals.price[0] && wine.price <= filterVals.price[1]) &&
         (wine.points >= filterVals.points[0] && wine.points <= filterVals.points[1]);
     });
-
-    // re-render plot
-    update(filteredData);
   }
 
   function update(data) {
@@ -277,9 +289,8 @@ $(function() {
         return scaledPoints + d.jitter;
       })
       .attr('cy', function (d) { return yScale(d.price) })
-      .style('fill', function (d) { return bgColor(d.color); });
-
-    circles.on('mouseover', function(d) {
+      .style('fill', function (d) { return bgColor(d.color); })
+      .on('mouseover', function(d) {
       // add data to sidebar
       const $wineDom = $('.wine-information');
       $wineDom.css('visibility', 'visible');
