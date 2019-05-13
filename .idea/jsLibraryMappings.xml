@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="PROJECT" libraries="{bootstrap, d3-geo-projection.v1, d3-geo.v1, d3.v4, jquery-3.3.1.slim, popper, queue.v1, topojson.v1}" />
+  </component>
+</project>
