@@ -48,10 +48,8 @@
       </p>
     </div>
   </div>
-</div>
 
 <!-- Scatter plot -->
-<div class="container">
   <div class="row">
     <!-- Wine information -->
     <div class="col col-xl-2">
@@ -68,27 +66,40 @@
       <div style="text-align:center; height: 50vh" id="d3-scatter"></div>
     </div>
   </div>
-</div>
 
 <!-- Filters -->
-<div class="container">
   <form>
     <div class="form-row">
       <!-- Country -->
       <div class="col-xl-2">
         <h4>Country</h4>
+        <span id="toggle-selection-country">
+          <a id="selectall-country" class="text-primary">Select All</a>
+          -
+          <a id="deselectall-country" class="text-danger">Deselect All</a>
+        </span>
         <div id="filter-country"></div>
       </div>
 
       <!-- Province -->
       <div class="col-xl-2">
         <h4>Province</h4>
+        <span id="toggle-selection-province">
+          <a id="selectall-province" class="text-primary">Select All</a>
+          -
+          <a id="deselectall-province" class="text-danger">Deselect All</a>
+        </span>
         <div id="filter-province"></div>
       </div>
 
       <!-- Variety -->
       <div class="col-xl-2">
         <h4>Variety</h4>
+        <span id="toggle-selection-variety">
+          <a id="selectall-variety" class="text-primary">Select All</a>
+          -
+          <a id="deselectall-variety" class="text-danger">Deselect All</a>
+        </span>
         <div id="filter-variety"></div>
       </div>
 

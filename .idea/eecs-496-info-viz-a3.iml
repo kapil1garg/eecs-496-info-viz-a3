@@ -16,5 +16,6 @@
     <orderEntry type="library" name="queue.v1" level="application" />
     <orderEntry type="library" name="topojson.v1" level="application" />
     <orderEntry type="library" name="d3-geo-projection.v1" level="application" />
+    <orderEntry type="library" name="jquery-1.12.4" level="application" />
   </component>
 </module>

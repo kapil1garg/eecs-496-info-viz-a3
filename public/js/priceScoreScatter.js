@@ -5,8 +5,9 @@ $(function() {
       (((prevHash << 5) - prevHash) + currVal.charCodeAt(0))|0, 0);
   }
 
-  // store data and filters globally
+  // store original data and filters globally
   let originalData = null;
+  let originalFilterVals = {};
 
   // store filter values from UI
   let filterVals = {
@@ -43,6 +44,9 @@ $(function() {
 
     // setup filters
     setupFilters(data);
+
+    // setup click handlers on select/deselect statements
+    handleSelectClick();
 
     // setup plot
     setupPlot(data);
@@ -152,7 +156,7 @@ $(function() {
           return d.color === selectedColor;
         })
         .style('opacity', 1);
-    }).on('mouseout', function(selectedColor) {
+    }).on('mouseout', function() {
       d3.selectAll('circle')
         .style('opacity', 0.85)
     });
@@ -160,9 +164,9 @@ $(function() {
 
   function setupFilters(data) {
     // make a function to create check boxes
-    function makeCheckBox(value) {
+    function makeCheckBox(filterName, value) {
       return `<div class="form-check">
-        <input class="form-check-input" type="checkbox" value="${ value }" id="country-${ value }" checked>
+        <input class="form-check-input" type="checkbox" value="${ value }" id="${ filterName }-${ value }" checked>
           <label class="form-check-label" for="defaultCheck1">
             ${ value }
           </label>
@@ -173,25 +177,25 @@ $(function() {
       // add country
       if (!filterVals.country.has(d.country)) {
         filterVals.country.add(d.country);
-        $('#filter-country').append(makeCheckBox(d.country));
+        $('#filter-country').append(makeCheckBox('country', d.country));
       }
 
       // add province
       if (!filterVals.province.has(d.province)) {
         filterVals.province.add(d.province);
-        $('#filter-province').append(makeCheckBox(d.province));
+        $('#filter-province').append(makeCheckBox('province', d.province));
       }
 
       // add variety
       if (!filterVals.variety.has(d.variety)) {
         filterVals.variety.add(d.variety);
-        $('#filter-variety').append(makeCheckBox(d.variety));
+        $('#filter-variety').append(makeCheckBox('variety', d.variety));
       }
 
       // add color
       if (!filterVals.color.has(d.color)) {
         filterVals.color.add(d.color);
-        $('#filter-color').append(makeCheckBox(d.color));
+        $('#filter-color').append(makeCheckBox('color', d.color));
       }
     });
 
@@ -261,12 +265,86 @@ $(function() {
       }
     });
     $amountRating.val( `${ $sliderRating.slider( "values", 0 ) } - ${ $sliderRating.slider( "values", 1 ) }`);
+
+    // store original filters
+    originalFilterVals = {
+      country: [...filterVals.country],
+      province: [...filterVals.province],
+      variety: [...filterVals.variety],
+      color: [...filterVals.color],
+      vintage: [filterVals.vintage[0], filterVals.vintage[1]],
+      price: [filterVals.price[0], filterVals.price[1]],
+      points: [filterVals.points[0], filterVals.points[1]]
+    };
+  }
+
+  function handleSelectClick() {
+    // country
+    $('#selectall-country').on('click', function() {
+      checkAllInFilter('country');
+      filterVals.country = new Set(originalFilterVals.country);
+      update(filterData());
+    });
+    $('#deselectall-country').on('click', function() {
+      uncheckAllInFilter('country');
+      filterVals.country = new Set();
+      update(filterData());
+    });
+
+    // province
+    $('#selectall-province').on('click', function() {
+      checkAllInFilter('province');
+      filterVals.province = new Set(originalFilterVals.province);
+      update(filterData());
+    });
+    $('#deselectall-province').on('click', function() {
+      uncheckAllInFilter('province');
+      filterVals.province = new Set();
+      update(filterData());
+    });
+
+    // variety
+    $('#selectall-variety').on('click', function() {
+      checkAllInFilter('variety');
+      filterVals.variety = new Set(originalFilterVals.variety);
+      update(filterData());
+    });
+    $('#deselectall-variety').on('click', function() {
+      uncheckAllInFilter('variety');
+      filterVals.variety = new Set();
+      update(filterData());
+    });
+
+    // listen for clicks on any checkbox
+    $('.form-check-input').on('click', function(e) {
+      let [filterName, filterValue] = e.currentTarget.id.split('-');
+      let isChecked = e.currentTarget.checked;
+
+      // update based on if checked or not
+      if (isChecked) {
+        filterVals[filterName].add(filterValue);
+      } else {
+        filterVals[filterName].delete(filterValue);
+      }
+
+      update(filterData());
+    });
+  }
+
+  function checkAllInFilter(filterName) {
+    $(`#filter-${ filterName } input`).prop('checked', true);
+  }
+
+  function uncheckAllInFilter(filterName) {
+    $(`#filter-${ filterName } input`).prop('checked', false);
   }
 
   function filterData() {
     // filter data and return
     return originalData.filter(wine => {
-      return (wine.vintage >= filterVals.vintage[0] && wine.vintage <= filterVals.vintage[1]) &&
+      return (filterVals.country.has(wine.country)) && (filterVals.province.has(wine.province)) &&
+        (filterVals.variety.has(wine.variety)) && (filterVals.color.has(wine.color)) &&
+        (wine.vintage >= filterVals.vintage[0] && wine.vintage <= filterVals.vintage[1]) &&
         (wine.price >= filterVals.price[0] && wine.price <= filterVals.price[1]) &&
         (wine.points >= filterVals.points[0] && wine.points <= filterVals.points[1]);
     });
@@ -281,8 +359,8 @@ $(function() {
       .append('circle')
       .attr('class', 'scatterDot')
       .attr('r', '5')
-      .attr('stroke', 'black')
-      .attr('stroke-width', 1)
+      // .attr('stroke', 'black')
+      // .attr('stroke-width', 0)
       .style('opacity', 0.85)
       .attr('cx', function (d) { // add a tiny amount of jitter on x-axis
         let scaledPoints = xScale(d.points);
