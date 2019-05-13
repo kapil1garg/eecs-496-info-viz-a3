@@ -1,3 +1,21 @@
 body {
   font-family: 'Raleway', sans-serif;
 }
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 200px;
+  height: 70px;
+  padding: 2px;
+  font-size: 11px;
+  color: white;
+  border: 0;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.wine-information {
+  visibility: hidden;
+}
+

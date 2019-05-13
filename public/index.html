@@ -22,29 +22,50 @@
 </head>
 
 <body>
-  <script src="https://d3js.org/d3-geo.v1.min.js"></script>
-  <script src="https://d3js.org/d3-selection.v1.min.js"></script>
-  <script src="https://d3js.org/d3-array.v1.min.js"></script>
+  <script src="http://d3js.org/d3.v4.min.js"></script>
+  <script src="http://d3js.org/queue.v1.min.js"></script>
   <script src="http://d3js.org/topojson.v1.min.js"></script>
-  <script src="https://d3js.org/d3-collection.v0.1.min.js"></script>
-  <script src="https://d3js.org/d3-dispatch.v0.4.min.js"></script>
-  <script src="https://d3js.org/d3-dsv.v0.3.min.js"></script>
-  <script src="https://d3js.org/d3-request.v0.4.min.js"></script>
-  <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+  <script src="https://d3js.org/d3-geo-projection.v1.min.js"></script>
 
   <script type="text/javascript" src="js/map.js"></script>
+  <script type="text/javascript" src="js/priceScoreScatter.js"></script>
 
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" type="text/css" href="css/map.css">
 
-  <!-- Page Content -->
+  <!-- Header and Description -->
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h1 class="mt-5">Interactive Wine Explorer</h1>
+      <p>
+        Welcome to the Wine Explorer!
+      </p>
+    </div>
+  </div>
+
   <div class="container">
     <div class="row">
-      <div class="col-lg-12 text-center">
-        <h1 class="mt-5">USA Map</h1>
-        <div id="d3-map"></div>
+      <div class="col col-xl-2">
+        <h5 id="wine-instruction">Hover on a circle for more information.</h5>
+
+        <!-- Wine information -->
+        <h5 id="wine-title" class="wine-information">Title</h5>
+        <p id="wine-country" class="wine-information">Region and country text long</p>
+        <p id="wine-vintage" class="wine-information">Vintage text long</p>
+        <p id="wine-price" class="wine-information">Price text long</p>
+        <p id="wine-rating" class="wine-information">Rating text long</p>
+      </div>
+
+      <div class="col col-xl-10 text-center">
+        <div style="text-align:center; height: 50vh" id="d3-scatter"></div>
       </div>
     </div>
+
+<!--    <div class="row">-->
+<!--      <div class="col-lg-12 text-center">-->
+<!--        <div style="text-align:center; height: 50vh" id="d3-map"></div>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </body>
 </html>
