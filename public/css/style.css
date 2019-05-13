@@ -1,5 +1,6 @@
 body {
   font-family: 'Raleway', sans-serif;
+  width: 100%;
 }
 
 div.tooltip {
@@ -19,3 +20,20 @@ div.tooltip {
   visibility: hidden;
 }
 
+.slider-select {
+  margin-bottom: 2rem;
+}
+
+.slider {
+  margin-left: 10px;
+  width: 100%;
+}
+
+.slider-text {
+  border:0;
+  font-weight:bold;
+}
+
+.container {
+  margin-bottom: 2rem;
+}
