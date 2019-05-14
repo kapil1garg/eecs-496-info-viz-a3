@@ -170,7 +170,7 @@ $(function() {
     function makeCheckBox(filterName, value) {
       return `<div class="form-check">
         <input class="form-check-input" type="checkbox" value="${ value }" id="${ filterName }-${ value }" checked>
-          <label class="form-check-label" for="defaultCheck1">
+          <label class="form-check-label" for="${ filterName }-${ value }">
             ${ value }
           </label>
         </div>`
@@ -320,7 +320,7 @@ $(function() {
 
     // listen for clicks on any checkbox
     $('.form-check-input').on('click', function(e) {
-      let [filterName, filterValue] = e.currentTarget.id.split('-');
+      let [filterName, filterValue] = e.currentTarget.id.split(/-(.+)/);
       let isChecked = e.currentTarget.checked;
 
       // update based on if checked or not
@@ -343,6 +343,7 @@ $(function() {
   }
 
   function filterData() {
+
     // filter data and return
     return originalData.filter(wine => {
       return (filterVals.country.has(wine.country)) && (filterVals.province.has(wine.province)) &&
@@ -372,33 +373,22 @@ $(function() {
       .attr('cy', function (d) { return yScale(d.price) })
       .style('fill', function (d) { return bgColor(d.color); })
       .on('mouseover', function(d) {
-      // add data to sidebar
-      const $wineDom = $('.wine-information');
-      $wineDom.css('visibility', 'visible');
-      $wineDom.css('color', bgColor(d.color));
-      $('#wine-instruction').hide();
-
-      $('#wine-title').text(d.title);
-      $('#wine-country').text(`${ d.province }, ${ d.country }`);
-      $('#wine-vintage').text(`Vintage: ${ d.vintage }`);
-      $('#wine-price').text(`Price: $${ d.price }`);
-      $('#wine-rating').text(`Rating: ${ d.points }/100 points`);
-
       // active tooltip
       tooltip.transition()
         .duration(0)
-        .style('opacity', 1.0);
-      tooltip.html(d.title)
+        .style('opacity', 1.0)
+        .style('text-align', 'left');
+      tooltip.html(`
+        <b>${ d.title }</b><br>
+        ${ d.province }, ${ d.country } (${ d.vintage })<br>
+        $${ d.price }; ${ d.points } / 100 points
+        `)
         .style('left', `${ d3.event.pageX }px`)
         .style('top', `${ d3.event.pageY - 28 }px`)
         .style('background', bgColor(d.color))
         .style('color', txtColor(d.color));
     })
       .on('mouseout', function(d) {
-        // hide all jquery text
-        $('.wine-information').css('visibility', 'hidden');
-        $('#wine-instruction').show();
-
         // deactivate tooltip
         tooltip.transition()
           .duration(0)
