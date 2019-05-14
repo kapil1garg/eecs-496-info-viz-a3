@@ -46,3 +46,15 @@ div.tooltip {
 h4 {
   font-size: 1.3rem;
 }
+
+.text-red-wine {
+  color: #722F37;
+}
+
+.text-rose-wine {
+  color: #FDBCB4;
+}
+
+.text-white-wine {
+  color: #ECCD13;
+}

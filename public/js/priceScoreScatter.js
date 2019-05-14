@@ -167,45 +167,109 @@ $(function() {
 
   function setupFilters(data) {
     // make a function to create check boxes
-    function makeCheckBox(filterName, value) {
+    function makeCheckBox(filterName, value, styleClasses) {
+      if (styleClasses === undefined) {
+        styleClasses = '';
+      }
+
       return `<div class="form-check">
         <input class="form-check-input" type="checkbox" value="${ value }" id="${ filterName }-${ value }" checked>
-          <label class="form-check-label" for="${ filterName }-${ value }">
+          <label class="form-check-label ${ styleClasses }" for="${ filterName }-${ value }">
             ${ value }
           </label>
         </div>`
     }
 
+    // get data for filters, with a special holder for grape variety
+    let varietyObj = [];
     data.forEach(function (d) {
       // add country
-      if (!filterVals.country.has(d.country)) {
-        filterVals.country.add(d.country);
-        $('#filter-country').append(makeCheckBox('country', d.country));
-      }
+      filterVals.country.add(d.country);
 
       // add province
-      if (!filterVals.province.has(d.province)) {
-        filterVals.province.add(d.province);
-        $('#filter-province').append(makeCheckBox('province', d.province));
-      }
+      filterVals.province.add(d.province);
 
       // add variety
       if (!filterVals.variety.has(d.variety)) {
         filterVals.variety.add(d.variety);
-        $('#filter-variety').append(makeCheckBox('variety', d.variety));
+        varietyObj.push({
+          'name': d.variety,
+          'color': d.color
+        });
       }
 
       // add color
-      if (!filterVals.color.has(d.color)) {
-        filterVals.color.add(d.color);
-        $('#filter-color').append(makeCheckBox('color', d.color));
-      }
+      filterVals.color.add(d.color);
 
       // add vintage
-      if (!filterVals.vintage.has(d.vintage.toString())) {
-        filterVals.vintage.add(d.vintage.toString());
-        $('#filter-vintage').append(makeCheckBox('vintage', d.vintage));
+      filterVals.vintage.add(d.vintage.toString());
+    });
+
+    // add sorted data to DOM
+    let countries = [...filterVals.country];
+    countries.sort();
+    countries.forEach(country => {
+      $('#filter-country').append(makeCheckBox('country', country));
+    });
+
+    let provinces = [...filterVals.province];
+    provinces.sort();
+    provinces.forEach(province => {
+      $('#filter-province').append(makeCheckBox('province', province));
+    });
+
+    varietyObj.sort(function (x, y) {
+      // sort first by wine color
+      if (x.color > y.color) return 1;
+      if (x.color < y.color) return -1;
+
+      // sort second by name
+      if (x.name > y.name) return 1;
+      if (x.name < y.name) return -1;
+    });
+
+    varietyObj.forEach(variety => {
+      let varietyColorClass = '';
+      switch (variety.color) {
+        case 'Red':
+          varietyColorClass = 'text-red-wine';
+          break;
+        case 'Rose':
+          varietyColorClass = 'text-rose-wine';
+          break;
+        case 'White':
+          varietyColorClass = 'text-white-wine';
+          break;
+        default:
+          break;
       }
+      $('#filter-variety').append(makeCheckBox('variety', variety.name, varietyColorClass));
+    });
+
+    let colors = [...filterVals.color];
+    colors.sort();
+    colors.forEach(color => {
+      let colorClass = '';
+      switch (color) {
+        case 'Red':
+          colorClass = 'text-red-wine';
+          break;
+        case 'Rose':
+          colorClass = 'text-rose-wine';
+          break;
+        case 'White':
+          colorClass = 'text-white-wine';
+          break;
+        default:
+          break;
+      }
+      $('#filter-color').append(makeCheckBox('color', color, colorClass));
+    });
+
+    let vintages = [...filterVals.vintage];
+    vintages.sort((a, b) => { return b - a });
+    vintages.forEach(vintage => {
+      $('#filter-vintage').append(makeCheckBox('vintage', vintage));
     });
 
     const $sliderPrice = $("#slider-price"),
