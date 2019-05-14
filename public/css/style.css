@@ -1,5 +1,6 @@
 body, html{
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
   margin:0;
   padding:0;
 }
@@ -9,6 +10,7 @@ body, html{
 }
 
 div.tooltip {
+  font-family: 'Montserrat', sans-serif;
   position: absolute;
   text-align: center;
   padding: 2px;
@@ -34,5 +36,4 @@ div.tooltip {
 
 .slider-text {
   border:0;
-  font-weight:bold;
 }
