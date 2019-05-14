@@ -34,6 +34,15 @@ div.tooltip {
   width: 100%;
 }
 
+.slider-div {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 .slider-text {
   border:0;
+}
+
+h4 {
+  font-size: 1.3rem;
 }

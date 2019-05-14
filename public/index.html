@@ -88,28 +88,29 @@
         <div id="filter-variety"></div>
       </div>
 
-      <!-- Color -->
+      <!-- Color and Vintage -->
       <div class="col-xl-2">
+        <!-- Color -->
         <h4>Wine Type</h4>
         <div id="filter-color"></div>
+        <br>
+
+        <!-- Vintage -->
+        <h4>Vintage</h4>
+        <span id="toggle-selection-vintage">
+          <a id="selectall-vintage" class="text-primary">Select All</a>
+          -
+          <a id="deselectall-vintage" class="text-danger">Deselect All</a>
+        </span>
+        <div id="filter-vintage"></div>
       </div>
 
       <!-- Slider selectors in last column -->
-      <div class="col-xl-3">
-        <div class="form-row slider-select">
-          <!-- Vintage -->
-          <h4>Vintage</h4>
-          <div>
-            <label for="amount-vintage">Vintage range:</label>
-            <input class="slider-text" type="text" id="amount-vintage" readonly>
-            <div class="slider" id="slider-vintage"></div>
-          </div>
-        </div>
-
+      <div class="col-xl-4">
         <!-- Price -->
         <div class="form-row slider-select">
           <h4>Price</h4>
-          <div>
+          <div class="col-xl-12 slider-div">
             <label for="amount-price">Price range:</label>
             <input class="slider-text" type="text" id="amount-price" readonly>
             <div class="slider" id="slider-price"></div>
@@ -119,7 +120,7 @@
         <!-- Rating -->
         <div class="form-row slider-select">
           <h4>Rating (out of 100)</h4>
-          <div>
+          <div class="col-xl-12 slider-div">
             <label for="amount-rating">Rating range:</label>
             <input class="slider-text" type="text" id="amount-rating" readonly>
             <div class="slider" id="slider-rating"></div>

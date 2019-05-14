@@ -15,7 +15,7 @@ $(function() {
     province: new Set(),
     variety: new Set(),
     color: new Set(),
-    vintage: [0, 0],
+    vintage: new Set(),
     price: [0, 0],
     points: [0, 0]
   };
@@ -200,30 +200,13 @@ $(function() {
         filterVals.color.add(d.color);
         $('#filter-color').append(makeCheckBox('color', d.color));
       }
-    });
 
-    // setup sliders
-    const $sliderVintage = $("#slider-vintage"),
-      $amountVintage = $( "#amount-vintage" );
-    filterVals.vintage = [d3.min(data, function(d) { return d.vintage; }), d3.max(data, function(d) { return d.vintage; })];
-
-    $sliderVintage.slider({
-      range: true,
-      min: filterVals.vintage[0],
-      max: filterVals.vintage[1],
-      values: [filterVals.vintage[0], filterVals.vintage[1]],
-      slide: function(event, ui) {
-        // set UI text
-        $amountVintage.val( `${ ui.values[0] } - ${ ui.values[1] }`);
-
-        // update filter values
-        filterVals.vintage = [ui.values[0], ui.values[1]];
-
-        // dynamically filter data and re-draw plot
-        update(filterData());
+      // add vintage
+      if (!filterVals.vintage.has(d.vintage.toString())) {
+        filterVals.vintage.add(d.vintage.toString());
+        $('#filter-vintage').append(makeCheckBox('vintage', d.vintage));
       }
     });
-    $amountVintage.val( `${ $sliderVintage.slider("values", 0) } - ${ $sliderVintage.slider( "values", 1 ) }`);
 
     const $sliderPrice = $("#slider-price"),
       $amountPrice = $( "#amount-price" );
@@ -275,7 +258,7 @@ $(function() {
       province: [...filterVals.province],
       variety: [...filterVals.variety],
       color: [...filterVals.color],
-      vintage: [filterVals.vintage[0], filterVals.vintage[1]],
+      vintage: [...filterVals.vintage],
       price: [filterVals.price[0], filterVals.price[1]],
       points: [filterVals.points[0], filterVals.points[1]]
     };
@@ -318,6 +301,18 @@ $(function() {
       update(filterData());
     });
 
+    // vintage
+    $('#selectall-vintage').on('click', function() {
+      checkAllInFilter('vintage');
+      filterVals.vintage = new Set(originalFilterVals.vintage);
+      update(filterData());
+    });
+    $('#deselectall-vintage').on('click', function() {
+      uncheckAllInFilter('vintage');
+      filterVals.vintage = new Set();
+      update(filterData());
+    });
+
     // listen for clicks on any checkbox
     $('.form-check-input').on('click', function(e) {
       let [filterName, filterValue] = e.currentTarget.id.split(/-(.+)/);
@@ -343,12 +338,11 @@ $(function() {
   }
 
   function filterData() {
-
     // filter data and return
     return originalData.filter(wine => {
       return (filterVals.country.has(wine.country)) && (filterVals.province.has(wine.province)) &&
         (filterVals.variety.has(wine.variety)) && (filterVals.color.has(wine.color)) &&
-        (wine.vintage >= filterVals.vintage[0] && wine.vintage <= filterVals.vintage[1]) &&
+        (filterVals.vintage.has(wine.vintage.toString())) &&
         (wine.price >= filterVals.price[0] && wine.price <= filterVals.price[1]) &&
         (wine.points >= filterVals.points[0] && wine.points <= filterVals.points[1]);
     });
@@ -363,8 +357,6 @@ $(function() {
       .append('circle')
       .attr('class', 'scatterDot')
       .attr('r', '5')
-      // .attr('stroke', 'black')
-      // .attr('stroke-width', 0)
       .style('opacity', 0.85)
       .attr('cx', function (d) { // add a tiny amount of jitter on x-axis
         let scaledPoints = xScale(d.points);
